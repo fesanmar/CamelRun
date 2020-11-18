@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class HolesField
+public class HolesArea
 {
 	public static class Builder
 	{
@@ -38,11 +38,11 @@ public class HolesField
 			return this;
 		}
 
-		public HolesField build()
+		public HolesArea build()
 		{
 			throwExceptionIfTotalHolesAreDifferentToListSize();
 			Collections.shuffle(holesList);
-			return new HolesField(holesList.toArray(new ColorHole[] {}));
+			return new HolesArea(holesList.toArray(new ColorHole[] {}));
 		}
 
 		private void throwExceptionIfTotalHolesAreDifferentToListSize()
@@ -57,16 +57,19 @@ public class HolesField
 	private ColorHole[] holes;
 	private Random random = new Random();
 
-	public HolesField(ColorHole[] holes)
+	public HolesArea(ColorHole[] holes)
 	{
 		this.holes = holes;
 	}
 
 	public int getStepsToMove()
 	{
-		int holeNumber = random.nextInt(holes.length);
-		System.out.println(holes[holeNumber].getSteps());
-		return holes[holeNumber].getSteps();
+		return holes[getRandomHole()].getSteps();
+	}
+
+	private int getRandomHole()
+	{
+		return random.nextInt(holes.length);
 	}
 
 }
