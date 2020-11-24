@@ -26,10 +26,10 @@ public class Camel
 
 	public int getLastStepsMoved()
 	{
-		return getLasHole().getSteps();
+		return getLastHole().getSteps();
 	}
 	
-	private ColorHole getLasHole()
+	private ColorHole getLastHole()
 	{
 		return movements.get(movements.size() - 1);
 	}
@@ -61,7 +61,7 @@ public class Camel
 
 	private String setLasStringPosition()
 	{
-		return getLasHole().getStringPositions();
+		return getLastHole().getStringPositions();
 	}
 
 }
