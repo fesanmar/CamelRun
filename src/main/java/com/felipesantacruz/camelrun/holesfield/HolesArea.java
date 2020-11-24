@@ -22,7 +22,7 @@ public class HolesArea
 
 		public Builder withNotScoringHoles(int howMany)
 		{
-			addColorHoles(howMany, new ColorHole("", 0));
+			addColorHoles(howMany, ColorHole.NO_STEPS_HOLE);
 			return this;
 		}
 
@@ -62,9 +62,9 @@ public class HolesArea
 		this.holes = holes;
 	}
 
-	public int getStepsToMove()
+	public ColorHole getColoredHole()
 	{
-		return holes[getRandomHole()].getSteps();
+		return holes[getRandomHole()];
 	}
 
 	private int getRandomHole()
