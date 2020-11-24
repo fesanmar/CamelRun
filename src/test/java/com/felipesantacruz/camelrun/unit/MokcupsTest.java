@@ -10,14 +10,18 @@ public class MokcupsTest
 {
 	public static final int TWO_STEPS = 2;
 	public static final int ONE_STEP = 1;
+	public static final int ZERO_STEP = 0;
 	public static HolesArea holesAreaPlayer1 = mock(HolesArea.class);
 	public static HolesArea holesAreaPlayer2 = mock(HolesArea.class);
+	public static HolesArea holesAreaPlayer3 = mock(HolesArea.class);
 	public static ColorHole oneStepHole = mock(ColorHole.class);
 	public static ColorHole twoStepHole = mock(ColorHole.class);
+	public static ColorHole zeroStepHole = mock(ColorHole.class);
 	
 	public static void setUpMockups()
 	{
 		when(oneStepHole.getSteps()).thenReturn(ONE_STEP);
 		when(twoStepHole.getSteps()).thenReturn(TWO_STEPS);
+		when(zeroStepHole.getSteps()).thenReturn(ZERO_STEP);
 	}
 }

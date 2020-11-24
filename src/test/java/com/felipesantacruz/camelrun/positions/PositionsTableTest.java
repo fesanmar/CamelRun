@@ -1,14 +1,9 @@
 package com.felipesantacruz.camelrun.positions;
 
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.holesAreaPlayer1;
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.holesAreaPlayer2;
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.oneStepHole;
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.setUpMockups;
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.twoStepHole;
+import static com.felipesantacruz.camelrun.unit.MokcupsTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +17,9 @@ class PositionsTableTest
 
 	private static final int SECOND_POSITION = 2;
 	private static final int FIRST_POSITON = 1;
+	private Camel camel1 = new Camel(1);
+	private Camel camel2 = new Camel(2);
+	private Camel camel3 = new Camel(3);
 
 	@BeforeAll
 	public static void setUp()
@@ -45,8 +43,6 @@ class PositionsTableTest
 	@Test
 	void callingGetInstanceAfterConfigWillReturnTheInstance()
 	{
-		Camel camel1 = mock(Camel.class);
-		Camel camel2 = mock(Camel.class);
 		PositionsTable.config(camel1, camel2);
 		assertThat(PositionsTable.getInstance()).isInstanceOf(PositionsTable.class);
 	}
@@ -54,7 +50,6 @@ class PositionsTableTest
 	@Test
 	void positionsShouldBeRefresedAfterOnePlayerShoot()
 	{
-		Camel camel1 = mock(Camel.class);
 		PositionsTable.config(camel1);
 		PositionsTable table = PositionsTable.getInstance();
 		Player player1 = new Player(holesAreaPlayer1, camel1, table);
@@ -67,8 +62,6 @@ class PositionsTableTest
 	@Test
 	void positionsShouldUpdatedAfterTwoPlayerShoot()
 	{
-		Camel camel1 = new Camel(1);
-		Camel camel2 = new Camel(2);
 		PositionsTable.config(camel1, camel2);
 		PositionsTable table = PositionsTable.getInstance();
 		Player player1 = new Player(holesAreaPlayer1, camel1, table);
@@ -84,6 +77,35 @@ class PositionsTableTest
 		assertThat(table.getPositonFor(camel1)).isEqualTo(SECOND_POSITION);
 	}
 	
+	@Test 
+	public void getPositionsReturnsTheRightNumberOfCamels()
+	{
+		PositionsTable.config(camel1, camel2);
+		PositionsTable table = PositionsTable.getInstance();
+		assertThat(table.getPositions()).hasSize(2);
+	}
 	
+	@Test
+	public void positionsMessageAreAsSpected()
+	{
+		PositionsTable.config(camel1, camel2, camel3);
+		PositionsTable table = PositionsTable.getInstance();
+		Player player1 = new Player(holesAreaPlayer1, camel1, table);
+		Player player2 = new Player(holesAreaPlayer2, camel2, table);
+		Player player3 = new Player(holesAreaPlayer3, camel3, table);
+		when(holesAreaPlayer1.getColoredHole()).thenReturn(oneStepHole);
+		when(holesAreaPlayer2.getColoredHole()).thenReturn(twoStepHole);
+		when(holesAreaPlayer3.getColoredHole()).thenReturn(zeroStepHole);
+		player1.shoot(); // Player 1 -> 1 step
+		player2.shoot(); // Player 2 -> 2 steps
+		player3.shoot(); // Player 3 -> 0 step
+		assertThat(table.getPositions())
+		.containsExactly(
+				"1º Camello 2", 
+				"2º Camello 1 a una posición",
+				"3º Camello 3 a dos posiciones"
+				);
+		
+	}
 
 }

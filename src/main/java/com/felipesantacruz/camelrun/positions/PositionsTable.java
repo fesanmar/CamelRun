@@ -1,7 +1,7 @@
 package com.felipesantacruz.camelrun.positions;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import com.felipesantacruz.camelrun.player.Camel;
@@ -33,18 +33,28 @@ public class PositionsTable
 	public void updatePositions()
 	{
 		instance.camelsClasification.sort(this::compare);
-		Collections.reverse(camelsClasification);
-
+		
 	}
 	
 	public int compare(Camel camle1, Camel camel2)
 	{
-		return camle1.getTotalSteps() - camel2.getTotalSteps();
+		return camel2.getTotalSteps() - camle1.getTotalSteps();
 	}
 
 	public int getPositonFor(Camel camel)
 	{
 		return camelsClasification.indexOf(camel) + 1;
+	}
+
+	public Collection<String> getPositions()
+	{
+		return createClassification();
+	}
+	
+	private Collection<String> createClassification()
+	{
+		Clasiffication classification = new SpanishClassification();
+		return classification.createClassificationFrom(camelsClasification);
 	}
 
 }
