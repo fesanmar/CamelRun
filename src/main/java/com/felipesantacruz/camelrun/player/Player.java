@@ -1,6 +1,7 @@
 package com.felipesantacruz.camelrun.player;
 
 import com.felipesantacruz.camelrun.holesfield.HolesArea;
+import com.felipesantacruz.camelrun.positions.PositionsScore;
 import com.felipesantacruz.camelrun.positions.PositionsTable;
 
 public class Player
@@ -8,7 +9,7 @@ public class Player
 
 	private HolesArea holesArea;
 	private Camel camel;
-	private PositionsTable table;
+	private PositionsScore table;
 
 	public Player(HolesArea holesArea, Camel camel)
 	{
@@ -18,9 +19,8 @@ public class Player
 	}
 	
 	// Used for test
-	public Player(HolesArea holesArea, Camel camel, PositionsTable table)
+	public Player(HolesArea holesArea, Camel camel, PositionsScore table)
 	{
-		super();
 		this.holesArea = holesArea;
 		this.camel = camel;
 		this.table = table;

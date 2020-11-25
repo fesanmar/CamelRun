@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import com.felipesantacruz.camelrun.player.Camel;
 
-public class SpanishClassification implements Clasiffication
+public class SpanishClassification implements Classificator
 {
 	private int firstCamelSteps = 0;
 	private int i = 0;
