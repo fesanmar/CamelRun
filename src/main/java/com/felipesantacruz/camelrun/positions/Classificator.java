@@ -7,4 +7,6 @@ import com.felipesantacruz.camelrun.player.Camel;
 public interface Classificator
 {
 	Collection<String> createClassificationFrom(Collection<Camel> positions);
+
+	String getTailReportForCamelInCollection(Camel camel, Collection<Camel> positions);
 }

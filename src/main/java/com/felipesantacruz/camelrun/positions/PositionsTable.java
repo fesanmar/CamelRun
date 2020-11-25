@@ -33,12 +33,11 @@ public class PositionsTable implements PositionsScore
 	}
 
 	@Override
-	public void updatePositions()
+	public synchronized void updatePositions()
 	{
 		if (camelsClasification == null)
 			throw new PositonTableUnConfigException();
 		camelsClasification.sort(this::compare);
-		
 	}
 	
 	private int compare(Camel camle1, Camel camel2)
@@ -47,11 +46,17 @@ public class PositionsTable implements PositionsScore
 	}
 
 	@Override
-	public int getPositonFor(Camel camel)
+	public synchronized int getPositonFor(Camel camel)
 	{
 		return camelsClasification.indexOf(camel) + 1;
 	}
-
+	
+	@Override
+	public String getTailReportFor(Camel camel)
+	{
+		return classificator.getTailReportForCamelInCollection(camel, camelsClasification);
+	}
+	
 	@Override
 	public Collection<String> getPositions()
 	{

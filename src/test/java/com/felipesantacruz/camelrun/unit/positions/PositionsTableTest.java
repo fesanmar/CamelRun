@@ -136,5 +136,25 @@ class PositionsTableTest
 				);
 		
 	}
+	
+	@Test
+	public void reportTailIsAsExpected()
+	{
+		table.config(camel1, camel2, camel3);
+		Classificator classificator = mock(Classificator.class);
+		table.setClassification(classificator);
+		when(classificator
+				.getTailReportForCamelInCollection(eq(camel2), eq(list(camel2, camel1, camel3))))
+		.thenReturn("va en primera posición");
+		
+		
+		camel2.move(twoStepHole);
+		camel1.move(oneStepHole);
+		camel3.move(zeroStepHole);
+		
+		table.updatePositions();
+		
+		assertThat(table.getTailReportFor(camel2)).isEqualTo("va en primera posición");
+	}
 
 }

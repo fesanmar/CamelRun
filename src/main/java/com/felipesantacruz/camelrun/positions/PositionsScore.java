@@ -21,4 +21,6 @@ public interface PositionsScore
 	boolean isGameFinish();
 
 	void setGameFinish();
+
+	String getTailReportFor(Camel camel);
 }

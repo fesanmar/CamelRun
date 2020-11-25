@@ -86,4 +86,46 @@ public class SpanishClassification implements Classificator
 		i++;
 	}
 
+	@Override
+	public String getTailReportForCamelInCollection(Camel camel, Collection<Camel> positions)
+	{
+		createClassificationFrom(positions);
+		String tail = getTailReportForCamel(camel);
+		if (tail.isEmpty())
+			return "va en primera posición";
+		return tail.concat(" del líder").trim();
+	}
+
+	private String getTailReportForCamel(Camel camel)
+	{
+		String actualCamelReport = getReportFor(camel);
+		String tail = getTailFor(camel, actualCamelReport);
+		return tail;
+	}
+
+	private String getReportFor(Camel camel)
+	{
+		String actualCamelReport = null; 
+		for (String report : clasiffication)
+		{
+			if (report.contains(camel.getName()))
+			{
+				actualCamelReport = report;
+				break;
+			}
+			
+		}
+		return actualCamelReport;
+	}
+	
+	private String getTailFor(Camel camel, String actualCamelReport)
+	{
+		int headEnds = getIndexWhereCamelNameEnds(camel, actualCamelReport);
+		return actualCamelReport.substring(headEnds);
+	}
+
+	private int getIndexWhereCamelNameEnds(Camel camel, String actualCamelReport)
+	{
+		return actualCamelReport.indexOf(camel.getName()) + camel.getName().length();
+	}
 }
