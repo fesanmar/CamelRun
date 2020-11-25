@@ -14,18 +14,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.felipesantacruz.camelrun.goalobserver.GoalReachedObserver;
 import com.felipesantacruz.camelrun.holesfield.ColorHole;
 import com.felipesantacruz.camelrun.player.Camel;
 
 class CamelTest
 {
 
+	private static final int GOAL_FIVE = 5;
 	private static ColorHole threeStepsHole = mock(ColorHole.class);
 	private static ColorHole twoStepsHole = mock(ColorHole.class);
 	private static ColorHole oneStepHole = mock(ColorHole.class);
 	private static ColorHole zeroStepsHole = mock(ColorHole.class);
-
-	private Camel camel = new Camel(1);
+	
+	private ColorHole xStepsHole = mock(ColorHole.class);
+	private Camel camel = new Camel(1, GOAL_FIVE);
+	private int numberOfNotifications = 0;
+	private GoalReachedObserver observer = () -> numberOfNotifications++;
 	
 	@BeforeAll
 	public static void setUp()
@@ -113,6 +118,53 @@ class CamelTest
 		camel.move(zeroStepsHole);
 		assertThat(camel)
 			.actualReportIs("Camello 1 avanza cero posiciones y lleva 0 posiciones");
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = { 1, 2, 10 })
+	void totalStepsWillNeverBeGreaterThanTheGoal(int goal)
+	{
+		when(xStepsHole.getSteps()).thenReturn(goal + 1);
+		Camel camelGoal = new Camel(1, goal);
+		camelGoal.move(xStepsHole);
+		assertThat(camelGoal).hasMovedATotalOfStepsOf(goal);
+	}
+	
+	@Test
+	void observerWillBeNotifiedWhenCamelReachesGoal()
+	{
+		camel.setGoalObserver(observer);
+		camel.move(threeStepsHole);
+		camel.move(threeStepsHole);
+		assertThat(numberOfNotifications).isOne();
+		assertThat(camel)
+			.hasMovedATotalOfStepsOf(GOAL_FIVE)
+			.hasReachedGoal();
+	}
+	
+	@Test
+	void observerWillBeNotifiedOnlyWhenReachTheGoalAndNotAfter()
+	{
+		camel.setGoalObserver(observer);
+		camel.move(threeStepsHole);
+		camel.move(threeStepsHole); // Reach the goal
+		camel.move(threeStepsHole); // Won't be notified
+		assertThat(numberOfNotifications).isOne();
+		assertThat(camel)
+			.hasMovedATotalOfStepsOf(GOAL_FIVE)
+			.hasReachedGoal();
+		
+	}
+	
+	@Test
+	void observerWillBeNotBeNotifiedIfTheGoalIsNotReached()
+	{
+		camel.setGoalObserver(observer);
+		camel.move(threeStepsHole);
+		assertThat(numberOfNotifications).isZero();
+		assertThat(camel)
+			.hasMovedATotalOfStepsOf(3)
+			.hasNotReachedGoal();
 	}
 
 }

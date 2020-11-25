@@ -26,6 +26,11 @@ public class Player
 		this.table = table;
 	}
 
+	public Camel getCamel()
+	{
+		return camel;
+	}
+
 	public void shoot()
 	{
 		camel.move(holesArea.getColoredHole());

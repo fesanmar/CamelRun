@@ -15,10 +15,10 @@ import com.felipesantacruz.camelrun.positions.SpanishClassification;
 
 class SpanishClassificationTest
 {
-
-	private Camel camel1 = new Camel(1);
-	private Camel camel2 = new Camel(2);
-	private Camel camel3 = new Camel(3);
+	private static final int GOAL_TOW = 2;
+	private Camel camel1 = new Camel(1, GOAL_TOW);
+	private Camel camel2 = new Camel(2, GOAL_TOW);
+	private Camel camel3 = new Camel(3, GOAL_TOW);
 	private Classificator classificator = new SpanishClassification();
 	
 	@BeforeAll

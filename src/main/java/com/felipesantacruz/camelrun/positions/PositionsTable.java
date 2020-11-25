@@ -10,7 +10,8 @@ public class PositionsTable implements PositionsScore
 {
 	private static PositionsTable instance = new PositionsTable();
 	private List<Camel> camelsClasification;
-	private Classificator classificator = new SpanishClassification();;
+	private Classificator classificator = new SpanishClassification();
+	private boolean gameIsFinish = false;
 
 	private PositionsTable() { }
 
@@ -19,23 +20,24 @@ public class PositionsTable implements PositionsScore
 		return instance;
 	}
 
-	public static void config(Camel... camels)
+	public void config(Camel... camels)
 	{
-		instance.camelsClasification = Arrays.asList(camels);
+		camelsClasification = Arrays.asList(camels);
 	}
 
-	public static void clearState()
+	public void clearState()
 	{
-		instance.camelsClasification = null;
-		instance.classificator = new SpanishClassification();
+		camelsClasification = null;
+		classificator = new SpanishClassification();
+		gameIsFinish = false;
 	}
 
 	@Override
 	public void updatePositions()
 	{
-		if (instance.camelsClasification == null)
+		if (camelsClasification == null)
 			throw new PositonTableUnConfigException();
-		instance.camelsClasification.sort(this::compare);
+		camelsClasification.sort(this::compare);
 		
 	}
 	
@@ -60,6 +62,18 @@ public class PositionsTable implements PositionsScore
 	public void setClassification(Classificator c)
 	{
 		classificator = c;
+	}
+
+	@Override
+	public boolean isGameFinish()
+	{
+		return gameIsFinish;
+	}
+
+	@Override
+	public void setGameFinish()
+	{
+		gameIsFinish = true;
 	}
 
 }

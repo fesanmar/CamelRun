@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.felipesantacruz.camelrun.player.Camel;
 import com.felipesantacruz.camelrun.player.Player;
+import com.felipesantacruz.camelrun.positions.PositionsScore;
 import com.felipesantacruz.camelrun.positions.PositionsTable;
 
 class PlayerTest
@@ -38,8 +39,8 @@ class PlayerTest
 	@Test
 	void shootChangesCamelsPositionInPositionTable()
 	{
-		PositionsTable.config(camel1, camel2);
-		PositionsTable table = spy(PositionsTable.getInstance());
+		PositionsScore table = spy(PositionsTable.getInstance());
+		table.config(camel1, camel2);
 		Player player1 = new Player(holesAreaPlayer1, camel1, table);
 		Player player2 = new Player(holesAreaPlayer2, camel2, table);
 		when(holesAreaPlayer1.getColoredHole()).thenReturn(oneStepHole);

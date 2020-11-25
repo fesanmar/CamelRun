@@ -1,6 +1,7 @@
 package com.felipesantacruz.camelrun.holesfield;
 
 import static java.lang.String.format;
+import static com.felipesantacruz.camelrun.holesfield.ColorHole.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +9,18 @@ import java.util.List;
 import java.util.Random;
 
 public class HolesArea
-{
+{ 	
+	public static HolesArea createDefaultArea()
+	{
+		return new HolesArea
+				.Builder(TOTAL_HOLES)
+				.withNotScoringHoles(3)
+				.withHolesColor(YELLOW_COLOR_HOLE, 4)
+				.withHolesColor(BLUE_COLOR_HOLE, 2)
+				.withHolesColor(RED_COLOR_HOLE, 1)
+				.build();
+	}
+	
 	public static class Builder
 	{
 		private List<ColorHole> holesList;

@@ -26,9 +26,11 @@ class PositionsTableTest
 
 	private static final int SECOND_POSITION = 2;
 	private static final int FIRST_POSITON = 1;
-	private Camel camel1 = new Camel(1);
-	private Camel camel2 = new Camel(2);
-	private Camel camel3 = new Camel(3);
+	private static final int GOAL_2 = 2;
+	private Camel camel1 = new Camel(1, GOAL_2);
+	private Camel camel2 = new Camel(2, GOAL_2);
+	private Camel camel3 = new Camel(3, GOAL_2);
+	private PositionsScore table = PositionsTable.getInstance();
 
 	@BeforeAll
 	public static void setUp()
@@ -39,7 +41,7 @@ class PositionsTableTest
 	@AfterEach
 	public void tearDown()
 	{
-		PositionsTable.clearState();
+		table.clearState();
 	}
 	
 	@Test
@@ -59,15 +61,22 @@ class PositionsTableTest
 	@Test
 	void callingUpdatePositionsAfterConfigDoesNotThrowException()
 	{
-		PositionsTable.config(camel1, camel2);
+		table.config(camel1, camel2);
 		PositionsTable.getInstance().updatePositions();
+	}
+	
+	@Test
+	void finishTheGame()
+	{
+		assertThat(table.isGameFinish()).isFalse();
+		table.setGameFinish();
+		assertThat(table.isGameFinish()).isTrue();
 	}
 
 	@Test
 	void positionsShouldBeRefresedAfterOnePlayerShoot()
 	{
-		PositionsTable.config(camel1);
-		PositionsScore table = PositionsTable.getInstance();
+		table.config(camel1);
 		
 		camel1.move(oneStepHole);
 		table.updatePositions();
@@ -78,8 +87,7 @@ class PositionsTableTest
 	@Test
 	void positionsShouldUpdatedAfterTwoPlayerShoot()
 	{
-		PositionsTable.config(camel1, camel2);
-		PositionsScore table = PositionsTable.getInstance();
+		table.config(camel1, camel2);
 		
 		camel1.move(oneStepHole);
 		table.updatePositions();
@@ -97,16 +105,14 @@ class PositionsTableTest
 	@Test 
 	public void getPositionsReturnsTheRightNumberOfCamels()
 	{
-		PositionsTable.config(camel1, camel2);
-		PositionsScore table = PositionsTable.getInstance();
+		table.config(camel1, camel2);
 		assertThat(table.getPositions()).hasSize(2);
 	}
 	
 	@Test
 	public void positionsMessageAreAsSpected()
 	{
-		PositionsTable.config(camel1, camel2, camel3);
-		PositionsScore table = PositionsTable.getInstance();
+		table.config(camel1, camel2, camel3);
 		Classificator classificator = mock(Classificator.class);
 		table.setClassification(classificator);
 		when(classificator

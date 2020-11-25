@@ -45,12 +45,37 @@ public class CamelAssert extends AbstractAssert<CamelAssert, Camel>
 		return this;
 	}
 	
+	public CamelAssert hasMovedLessStepsThan(int steps)
+	{
+		isNotNull();
+		Assertions.assertThat(actual.getTotalSteps())
+			.as("Camel total movements y lesser than")
+			.isLessThan(steps);
+		return this;
+	}
+	
 	public CamelAssert actualReportIs(String report)
 	{
 		isNotNull();
 		Assertions.assertThat(actual.getReport())
 			.as("Camel report")
 			.isEqualTo(report);
+		return this;
+	}
+	
+	public CamelAssert hasReachedGoal()
+	{
+		Assertions.assertThat(actual.goalReached())
+			.as("Camel reached goal")
+			.isEqualTo(true);
+		return this;
+	}
+	
+	public CamelAssert hasNotReachedGoal()
+	{
+		Assertions.assertThat(actual.goalReached())
+			.as("Camel hast NOT reached goal")
+			.isEqualTo(false);
 		return this;
 	}
 }
