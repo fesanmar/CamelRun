@@ -20,18 +20,21 @@ import com.felipesantacruz.camelrun.player.Player;
 import com.felipesantacruz.camelrun.player.PlayerSimulator;
 import com.felipesantacruz.camelrun.player.RandomTimerShooter;
 import com.felipesantacruz.camelrun.positions.PositionsScore;
+import com.felipesantacruz.camelrun.positions.PositionsTable;
+import com.felipesantacruz.camelrun.positions.UpdatePositionCallback;
 
 class PlayerSimulatorTest
 {
 
 	public static final int GOAL_10 = 10;
+	private UpdatePositionCallback mockCallback = mock(UpdatePositionCallback.class);
 	private static HolesArea oneStepHolesArea = mock(HolesArea.class);
 	private static HolesArea threeStepHolesArea = mock(HolesArea.class);
-	private PositionsScore table = mock(PositionsScore.class);
+	private PositionsScore table = mock(PositionsTable.class);
 	private Camel camel1 = spy(new Camel(1, GOAL_10));
 	private Camel camel2 = spy(new Camel(2, GOAL_10));
-	private Player slowerPlayer = spy(new Player(oneStepHolesArea, camel1));
-	private Player fasterPlayer = spy(new Player(threeStepHolesArea, camel2));
+	private Player slowerPlayer = spy(new Player(oneStepHolesArea, camel1, table));
+	private Player fasterPlayer = spy(new Player(threeStepHolesArea, camel2, table));
 	private PlayerSimulator slowerSimulator = new RandomTimerShooter(slowerPlayer, table);
 	private PlayerSimulator fasterSimulator = new RandomTimerShooter(fasterPlayer, table);
 
@@ -47,6 +50,9 @@ class PlayerSimulatorTest
 	@BeforeEach
 	void setUpWithEveryTest()
 	{
+		table.clearState();
+		slowerPlayer.setCallback(mockCallback);
+		fasterPlayer.setCallback(mockCallback);
 		((RandomTimerShooter) slowerSimulator).setSleepTo(false);
 		((RandomTimerShooter) fasterSimulator).setSleepTo(false);
 		when(table.isGameFinish()).thenReturn(false);
@@ -57,6 +63,7 @@ class PlayerSimulatorTest
 	@Test
 	void playerShootsUntilGoalIsReached()
 	{
+		table.config(camel1);
 		slowerSimulator.run();
 		verify(slowerPlayer, times(10)).shoot();
 		assertThat(camel1).hasMovedATotalOfStepsOf(GOAL_10);
@@ -65,6 +72,7 @@ class PlayerSimulatorTest
 	@Test
 	void gameFinishWhenCamelReachTheGoal()
 	{
+		table.config(camel1, camel2);
 		slowerSimulator.run();
 		verify(table).setGameFinish();
 		assertThat(table.isGameFinish()).isTrue();
@@ -73,6 +81,7 @@ class PlayerSimulatorTest
 	@Test
 	void allPlayersStopWhenOneCamelReachTheGoal() throws InterruptedException
 	{
+		table.config(camel1, camel2);
 		Thread t1 = new Thread(slowerSimulator);
 		Thread t2 = new Thread(fasterSimulator);
 		t1.start();

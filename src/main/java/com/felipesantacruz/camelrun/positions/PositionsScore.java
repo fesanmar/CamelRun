@@ -23,4 +23,6 @@ public interface PositionsScore
 	void setGameFinish();
 
 	String getTailReportFor(Camel camel);
+
+	void updatePositions(UpdatePositionCallback callback);
 }

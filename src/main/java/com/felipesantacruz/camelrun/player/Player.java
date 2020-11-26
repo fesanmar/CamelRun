@@ -3,6 +3,7 @@ package com.felipesantacruz.camelrun.player;
 import com.felipesantacruz.camelrun.holesfield.HolesArea;
 import com.felipesantacruz.camelrun.positions.PositionsScore;
 import com.felipesantacruz.camelrun.positions.PositionsTable;
+import com.felipesantacruz.camelrun.positions.UpdatePositionCallback;
 
 public class Player
 {
@@ -10,6 +11,7 @@ public class Player
 	private HolesArea holesArea;
 	private Camel camel;
 	private PositionsScore table;
+	private UpdatePositionCallback callbak = this::printReport;
 
 	public Player(HolesArea holesArea, Camel camel)
 	{
@@ -34,7 +36,17 @@ public class Player
 	public void shoot()
 	{
 		camel.move(holesArea.getColoredHole());
-		table.updatePositions();
+		table.updatePositions(callbak);
+	}
+
+	public void setCallback(UpdatePositionCallback callbak)
+	{
+		this.callbak = callbak;
+	}
+	
+	public void printReport()
+	{
+		System.out.println(camel.getReport() + " " + table.getTailReportFor(camel));
 	}
 
 }

@@ -8,18 +8,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.util.Lists.list;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import com.felipesantacruz.camelrun.player.Camel;
 import com.felipesantacruz.camelrun.positions.Classificator;
 import com.felipesantacruz.camelrun.positions.PositionsScore;
 import com.felipesantacruz.camelrun.positions.PositionsTable;
 import com.felipesantacruz.camelrun.positions.PositonTableUnConfigException;
+import com.felipesantacruz.camelrun.positions.UpdatePositionCallback;
 
 class PositionsTableTest
 {
@@ -155,6 +156,18 @@ class PositionsTableTest
 		table.updatePositions();
 		
 		assertThat(table.getTailReportFor(camel2)).isEqualTo("va en primera posición");
+	}
+	
+	@Test
+	public void callbackIsCalledAfterUpdatePositoinsWhenUpdatePositonsWithCallbackIsCalled()
+	{
+		table.config(camel1, camel2, camel3);
+		table = spy(table);
+		UpdatePositionCallback callback = mock(UpdatePositionCallback.class);
+		table.updatePositions(callback);
+		InOrder inOrder = inOrder(table, callback);
+		inOrder.verify(table).updatePositions();
+		inOrder.verify(callback).execute();
 	}
 
 }

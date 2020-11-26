@@ -2,9 +2,6 @@ package com.felipesantacruz.camelrun.player;
 
 import static java.lang.String.format;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.felipesantacruz.camelrun.goalobserver.GoalReachedObserver;
 import com.felipesantacruz.camelrun.goalobserver.GoalReachedSubject;
 import com.felipesantacruz.camelrun.holesfield.ColorHole;
@@ -13,8 +10,9 @@ public class Camel implements GoalReachedSubject
 {
 	private int number;
 	private int goal;
+	private int totalSteps = 0;
+	private ColorHole lastHole;
 	private boolean goalReached = false;
-	private List<ColorHole> movements = new ArrayList<>();
 	private GoalReachedObserver observer = () -> {};
 
 	public Camel(int number)
@@ -38,21 +36,12 @@ public class Camel implements GoalReachedSubject
 
 	public int getLastStepsMoved()
 	{
-		return getLastHole().getSteps();
-	}
-	
-	private ColorHole getLastHole()
-	{
-		return movements.get(movements.size() - 1);
+		return lastHole.getSteps();
 	}
 
 	public int getTotalSteps()
 	{
-		int stepsWalked = movements
-				.stream()
-				.mapToInt(hole -> hole.getSteps())
-				.reduce(0, (totalSteps, lasStep) -> totalSteps + lasStep);
-		return stepsWalked >= goal ? goal : stepsWalked;
+		return totalSteps >= goal ? goal : totalSteps;
 	}
 
 	public void move(ColorHole hole)
@@ -63,7 +52,8 @@ public class Camel implements GoalReachedSubject
 
 	private void takeSteps(ColorHole hole)
 	{
-		movements.add(hole);
+		lastHole = hole;
+		totalSteps += hole.getSteps();
 		if (goalWasReached())
 			changeGoalStateAndNotifyObserver();
 	}
@@ -87,13 +77,13 @@ public class Camel implements GoalReachedSubject
 	public String getReport()
 	{
 		return format("%s avanza %s y lleva %d posiciones", 
-						getName(), setLasStringPosition(), getTotalSteps());
+						getName(), getLastStringPosition(), getTotalSteps());
 				
 	}
 
-	private String setLasStringPosition()
+	private String getLastStringPosition()
 	{
-		return getLastHole().getStringPositions();
+		return lastHole.getStringPositions();
 	}
 
 	@Override

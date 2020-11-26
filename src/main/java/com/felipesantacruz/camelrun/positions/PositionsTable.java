@@ -31,6 +31,13 @@ public class PositionsTable implements PositionsScore
 		classificator = new SpanishClassification();
 		gameIsFinish = false;
 	}
+	
+	@Override
+	public synchronized void updatePositions(UpdatePositionCallback callback)
+	{
+		updatePositions();
+		callback.execute();
+	}
 
 	@Override
 	public synchronized void updatePositions()
