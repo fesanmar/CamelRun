@@ -104,18 +104,14 @@ public class SpanishClassification implements Classificator
 	}
 
 	private String getReportFor(Camel camel)
-	{
-		String actualCamelReport = null; 
+	{ 
 		for (String report : clasiffication)
 		{
 			if (report.contains(camel.getName()))
-			{
-				actualCamelReport = report;
-				break;
-			}
+				return report;
 			
 		}
-		return actualCamelReport;
+		return null;
 	}
 	
 	private String getTailFor(Camel camel, String actualCamelReport)
