@@ -18,9 +18,9 @@ public class AppMain
 	private static final String WRONG_GOAL_MESSAGE = "¡Error! La longitud del recorrido no puede ser menor a una posición.";
 	private static final Predicate<Integer> GOAL_PREDICATE = goal -> goal > 0;
 	
-	static final String WELCOME_MESSAGE = "Bienvenido a CamelRun, la aplicaciónd de"
-			+ " simulación de las carreras de camellos.\n"
-			+ "Para abandonar la aplicación, introduce cualaqier carácter no numérico.\n";
+	static final String WELCOME_MESSAGE = "Bienvenido a CamelRun, la aplicación de"
+			+ " simulación de carreras de camellos.\n"
+			+ "Para abandonar la aplicación, introduce cualaquier carácter no numérico. Sólo se permiten números enteros.\n";
 	private static CLIIntegerFetcher playerFetcher;
 	private static CLIIntegerFetcher goalFetcher;
 	
