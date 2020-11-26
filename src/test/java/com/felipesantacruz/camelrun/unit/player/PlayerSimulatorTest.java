@@ -1,7 +1,9 @@
 package com.felipesantacruz.camelrun.unit.player;
 
 import static com.felipesantacruz.camelrun.assertions.CamelRunAssertions.assertThat;
-import static com.felipesantacruz.camelrun.unit.MokcupsTest.*;
+import static com.felipesantacruz.camelrun.unit.MokcupsTest.oneStepHole;
+import static com.felipesantacruz.camelrun.unit.MokcupsTest.setUpMockups;
+import static com.felipesantacruz.camelrun.unit.MokcupsTest.threeStepHole;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -44,7 +46,6 @@ class PlayerSimulatorTest
 		setUpMockups();
 		when(oneStepHolesArea.getColoredHole()).thenReturn(oneStepHole);
 		when(threeStepHolesArea.getColoredHole()).thenReturn(threeStepHole);
-		
 	}
 
 	@BeforeEach
@@ -84,8 +85,9 @@ class PlayerSimulatorTest
 		table.config(camel1, camel2);
 		Thread t1 = new Thread(slowerSimulator);
 		Thread t2 = new Thread(fasterSimulator);
-		t1.start();
 		t2.start();
+		Thread.sleep(1); // Makes sure fasterSimulator wins
+		t1.start();
 		t1.join();
 		t2.join();
 		assertThat(table.isGameFinish()).isTrue();

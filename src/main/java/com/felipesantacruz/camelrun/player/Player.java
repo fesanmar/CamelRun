@@ -35,8 +35,11 @@ public class Player
 
 	public void shoot()
 	{
-		camel.move(holesArea.getColoredHole());
-		table.updatePositions(callbak);
+		if (!table.isGameFinish())
+		{
+			camel.move(holesArea.getColoredHole());
+			table.updatePositions(callbak);			
+		}
 	}
 
 	public void setCallback(UpdatePositionCallback callbak)
@@ -46,7 +49,7 @@ public class Player
 	
 	public void printReport()
 	{
-		System.out.println(camel.getReport() + " " + table.getTailReportFor(camel));
+		System.out.println(camel.getReport() + ", " + table.getTailReportFor(camel));
 	}
 
 }

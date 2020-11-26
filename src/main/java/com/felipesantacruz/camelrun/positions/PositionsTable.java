@@ -87,5 +87,19 @@ public class PositionsTable implements PositionsScore
 	{
 		gameIsFinish = true;
 	}
+	
+	@Override
+	public void printClassification()
+	{
+		System.out.println(getWinnerName() + " ha ganado la carrera");
+		System.out.println("El ranking ha quedado del siguiente modo:");
+		for (String position : getPositions())
+			System.out.println(position);
+	}
+
+	private String getWinnerName()
+	{
+		return camelsClasification.get(0).getName();
+	}
 
 }

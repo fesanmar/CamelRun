@@ -17,14 +17,14 @@ public class ClassicGame implements Game
 	private int goal;
 	private Player[] players;
 	private PositionsScore table;
-	private boolean sleeping = true;
+
 
 	public ClassicGame(int numberPlayers, int goal)
 	{
 		this(numberPlayers, goal,PositionsTable.getInstance());
 	}
 	
-	// Used for tests
+	// Used for testing
 	public ClassicGame(int numberPlayers, int goal, PositionsScore table)
 	{
 		checkIfArgumentsAreRight(numberPlayers, goal);
@@ -80,11 +80,6 @@ public class ClassicGame implements Game
 				.toArray(new Camel[players.length]);
 	}
 	
-	public synchronized void setSleepingTo(boolean b)
-	{
-		sleeping = b;
-	}
-	
 	@Override
 	public Player[] getPlayers()
 	{
@@ -102,12 +97,18 @@ public class ClassicGame implements Game
 	{
 		for (Player player : players)
 			startSimulationFor(player);
+		while (camelsAreRunning()) { }
+		table.printClassification();
+	}
+
+	private boolean camelsAreRunning()
+	{
+		return CAMELS_RUNNING_GROUP.activeCount() > 0;
 	}
 
 	private void startSimulationFor(Player player)
 	{
 		PlayerSimulator simulator = new RandomTimerShooter(player);
-		((RandomTimerShooter) simulator).setSleepTo(sleeping);
 		new Thread(CAMELS_RUNNING_GROUP, simulator).start();
 	}
 

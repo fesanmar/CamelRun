@@ -25,4 +25,6 @@ public interface PositionsScore
 	String getTailReportFor(Camel camel);
 
 	void updatePositions(UpdatePositionCallback callback);
+
+	void printClassification();
 }

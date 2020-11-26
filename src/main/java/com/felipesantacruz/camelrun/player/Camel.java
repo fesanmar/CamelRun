@@ -76,9 +76,14 @@ public class Camel implements GoalReachedSubject
 
 	public String getReport()
 	{
-		return format("%s avanza %s y lleva %d posiciones", 
-						getName(), getLastStringPosition(), getTotalSteps());
+		return format("%s avanza %s y lleva %d posici%s", 
+						getName(), getLastStringPosition(), getTotalSteps(), getAccurateEnd());
 				
+	}
+
+	private String getAccurateEnd()
+	{
+		return getTotalSteps() == 1 ? "ón" : "ones";
 	}
 
 	private String getLastStringPosition()

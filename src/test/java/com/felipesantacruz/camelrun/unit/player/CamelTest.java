@@ -99,7 +99,7 @@ class CamelTest
 	{
 		camel.move(oneStepHole);
 		assertThat(camel)
-			.actualReportIs("Camello 1 avanza una posición y lleva 1 posiciones");
+			.actualReportIs("Camello 1 avanza una posición y lleva 1 posición");
 	}
 	
 	@Test
