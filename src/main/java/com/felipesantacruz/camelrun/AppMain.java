@@ -29,12 +29,12 @@ public class AppMain
 	private static void askUserToEnterPlayersAndGoal()
 	{
 		System.out.println(WELCOME_MESSAGE);
-		numberOfPlayers = fetchProperty(NUMBER_OF_PLAYERS);
-		goal = fetchProperty(GOAL);
+		numberOfPlayers = fetchValueFor(NUMBER_OF_PLAYERS);
+		goal = fetchValueFor(GOAL);
 		scanner.close();
 	}
 	
-	private static int fetchProperty(CLIProperty property)
+	private static int fetchValueFor(CLIProperty property)
 	{
 		CLIIntegerFetcher fetcher = new CLIIntegerFetcher(property, scanner);
 		fetcher.askForInteger();
