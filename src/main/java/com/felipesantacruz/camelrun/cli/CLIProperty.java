@@ -29,7 +29,7 @@ public enum CLIProperty
 		@Override
 		public String question()
 		{
-			return "Introduce la longitud del recorido en posiciones (no puede ser menor a uno):";
+			return "Introduce la longitud del recorrido en posiciones (no puede ser menor a uno):";
 		}
 
 		@Override
